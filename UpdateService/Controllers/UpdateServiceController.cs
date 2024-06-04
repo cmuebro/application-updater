@@ -1,6 +1,7 @@
 using Common.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 using UpdateService.Queries;
 
 namespace UpdateService.Controllers;
@@ -20,9 +21,11 @@ public class UpdateServiceController : ControllerBase
     ///     Über diesen Enpoint kann die neuste Version der Software heruntergeladen werden.
     /// </summary>
     [HttpGet("download")]
-    public async Task<ActionResult<FileDownloadResource>> DownloadLatestVersion()
+    public async Task<IActionResult> DownloadLatestVersion()
     {
-        return Ok(await Mediator.Send(new DownloadLatestVersionQuery()));
+        var result = await Mediator.Send(new DownloadLatestVersionQuery());
+        
+        return File(result.FileContent, "application/octet-stream");
     }
 
     /// <summary>

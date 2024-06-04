@@ -109,17 +109,16 @@ class Program
             if (Configuration == null)
                 throw new Exception("Konfiguration wurde nicht geladen.");
 
-            var targetPath = Configuration["TargetPath"];
             var response = await HttpClient.GetAsync(downloadUrl);
 
             response.EnsureSuccessStatusCode();
 
-            await using (var fileStream = new FileStream(string.Join(@"\", targetPath, "SampleApplication.exe"), FileMode.Create, FileAccess.Write, FileShare.None))
+            await using (var fileStream = new FileStream(string.Join(@"\", TargetPath, "SampleApplication.exe"), FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 await response.Content.CopyToAsync(fileStream);
             }
 
-            Console.WriteLine($"Anwendung wurde erfolgreich heruntergeladen und installiert: {targetPath}");
+            Console.WriteLine($"Anwendung wurde erfolgreich heruntergeladen und installiert: {TargetPath}");
         }
         catch (Exception ex)
         {
